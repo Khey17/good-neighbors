@@ -22,7 +22,7 @@ export default function ProfileSetup() {
   const navigate = useNavigate()
 
   const [bio, setBio]               = useState('')
-  const [category, setCategory]     = useState('')
+  const [categories, setCategories] = useState([])
   const [skillsRaw, setSkillsRaw]   = useState('')
   const [location, setLocation]     = useState('')
   const [instagram, setInstagram]   = useState('')
@@ -47,7 +47,7 @@ export default function ProfileSetup() {
         body: JSON.stringify({
           display_name:  user.display_name,
           bio,
-          category,
+          category: categories.join(', '),
           skills,
           location,
           instagram,
@@ -95,23 +95,28 @@ export default function ProfileSetup() {
             <p className="text-xs text-gray-400 mt-1">This is the most important field — the AI uses it to match your vibe to gigs.</p>
           </div>
 
-          {/* Category */}
+          {/* Categories */}
           <div>
             <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">
-              Category <span className="text-green-500">*</span>
+              Categories <span className="text-green-500">*</span>
             </label>
             <div className="flex flex-wrap gap-2">
               {CATEGORIES.map(cat => (
                 <button
-                  key={cat} type="button" onClick={() => setCategory(cat)}
+                  key={cat} type="button" onClick={() => {
+                    setCategories(prev => 
+                      prev.includes(cat) ? prev.filter(c => c !== cat) : [...prev, cat]
+                    )
+                  }}
                   className={`px-4 py-2 rounded-full text-sm font-bold border-2 transition-all duration-200 ${
-                    category === cat
+                    categories.includes(cat)
                       ? 'border-green-600 bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-400'
                       : 'border-gray-200 dark:border-gray-700 text-gray-500 hover:border-green-300'
                   }`}
                 >{cat}</button>
               ))}
             </div>
+            <p className="text-xs text-gray-400 mt-1">Select all that apply.</p>
           </div>
 
           {/* Skills */}
@@ -152,7 +157,7 @@ export default function ProfileSetup() {
             </div>
           )}
 
-          <button type="submit" disabled={loading || !bio || !category}
+          <button type="submit" disabled={loading || !bio || categories.length === 0}
             className="btn bg-green-600 hover:bg-green-700 text-white w-full py-3 rounded-xl text-sm font-bold disabled:opacity-50">
             {loading ? 'Saving...' : 'Save Profile & Find My Matches →'}
           </button>
