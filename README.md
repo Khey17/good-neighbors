@@ -98,7 +98,7 @@ good-neighbors/
 
 ---
 ## Checklist Flaws
-- [ ] multi-selector when signing up
+- [x] multi-selector when signing up
 <img width="1664" height="852" alt="image" src="https://github.com/user-attachments/assets/efd1950a-dd84-456d-ac62-7b7dc7b329cb" />
 
 
