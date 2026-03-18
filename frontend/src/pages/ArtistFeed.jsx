@@ -39,12 +39,13 @@ export default function ArtistFeed() {
     })
       .then(res => {
         if (res.status === 409) {
-          if (retryCount.current < 5) {
+          if (retryCount.current < 10) {
             retryCount.current += 1
             setWarming(true)
-            setTimeout(() => loadGigs(true), 2000)
+            setTimeout(() => loadGigs(true), 3000)
           } else {
-            navigate('/setup', { replace: true })
+            setWarming(false)
+            setError('Your profile is still being processed. Check back in a minute.')
           }
           return null
         }
