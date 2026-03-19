@@ -13,18 +13,6 @@ import { useAuth } from '../lib/auth'
 
 const AVATAR_COLORS = ['bg-green-500', 'bg-blue-500', 'bg-purple-500', 'bg-orange-500', 'bg-pink-500']
 
-const CATEGORY_STYLE = {
-  'Live Music': 'bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300',
-  'Food Influencer': 'bg-orange-100 text-orange-700 dark:bg-orange-900/40 dark:text-orange-300',
-  'Social Influencer': 'bg-pink-100 text-pink-700 dark:bg-pink-900/40 dark:text-pink-300',
-  'Visual Art': 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300',
-  'Muralist': 'bg-teal-100 text-teal-700 dark:bg-teal-900/40 dark:text-teal-300',
-  'Brand Design': 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300',
-  'Video / Film': 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300',
-  'Photography': 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-300',
-  'Community': 'bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300',
-}
-
 export default function Applicants() {
   const { gigId } = useParams()
   const { user }  = useAuth()
@@ -76,16 +64,7 @@ export default function Applicants() {
                   </div>
                   <div>
                     <h3 className="font-bold text-gray-900 dark:text-gray-100">{a.display_name}</h3>
-                    <div className="flex flex-wrap gap-1 mt-1">
-                      {(a.category || '').split(',').map(c => c.trim()).filter(Boolean).map(cat => {
-                        const style = CATEGORY_STYLE[cat] || 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-300'
-                        return (
-                          <span key={cat} className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full ${style}`}>
-                            {cat}
-                          </span>
-                        )
-                      })}
-                    </div>
+                    <p className="text-xs text-gray-400">{a.category}</p>
                   </div>
                 </div>
 

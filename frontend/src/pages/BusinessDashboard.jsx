@@ -140,6 +140,7 @@ export default function BusinessDashboard() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 stagger">
               {creators.map((creator, i) => {
+                const catStyle   = CATEGORY_STYLE[creator.category] || 'bg-gray-100 text-gray-600'
                 const avatarColor = AVATAR_COLORS[i % AVATAR_COLORS.length]
                 const matchPct   = Math.round((creator.match_score ?? 0) * 100)
 
@@ -150,16 +151,9 @@ export default function BusinessDashboard() {
                     </div>
 
                     <h3 className="font-bold text-gray-900 dark:text-gray-100 text-sm">{creator.display_name}</h3>
-                    <div className="flex flex-wrap gap-1 mt-1 mb-3">
-                      {(creator.category || '').split(',').map(c => c.trim()).filter(Boolean).map(cat => {
-                        const style = CATEGORY_STYLE[cat] || 'bg-gray-100 text-gray-600'
-                        return (
-                          <span key={cat} className={`text-xs font-bold px-2.5 py-1 rounded-full ${style}`}>
-                            {cat}
-                          </span>
-                        )
-                      })}
-                    </div>
+                    <span className={`text-xs font-bold px-2.5 py-1 rounded-full self-start mt-1 mb-3 ${catStyle}`}>
+                      {creator.category}
+                    </span>
 
                     {creator.skills?.length > 0 && (
                       <div className="flex flex-wrap gap-1 mb-4">
