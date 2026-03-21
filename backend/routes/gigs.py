@@ -77,7 +77,7 @@ async def my_gigs(current_user: dict = Depends(require_role("business"))):
     async with pool.acquire() as conn:
         rows = await conn.fetch(
             """
-            SELECT g.id, g.title, g.category, g.status, g.pay, g.date, g.location,
+            SELECT g.id, g.title, g.description, g.category, g.status, g.pay, g.date, g.location,
                    COUNT(a.id) AS applicant_count
             FROM gigs g
             LEFT JOIN applications a ON a.gig_id = g.id
@@ -89,6 +89,52 @@ async def my_gigs(current_user: dict = Depends(require_role("business"))):
         )
 
     return {"gigs": [dict(r) for r in rows]}
+
+
+@router.put("/{gig_id}")
+async def update_gig(
+    gig_id: str,
+    body: GigCreate,
+    background_tasks: BackgroundTasks,
+    current_user: dict = Depends(require_role("business")),
+):
+    """Business edits their own gig."""
+    pool = get_pool()
+    async with pool.acquire() as conn:
+        gig = await conn.fetchrow("SELECT business_id FROM gigs WHERE id = $1", gig_id)
+        if not gig:
+            raise HTTPException(status_code=404, detail="Gig not found.")
+        if str(gig["business_id"]) != current_user["user_id"]:
+            raise HTTPException(status_code=403, detail="Not your gig.")
+        await conn.execute(
+            """
+            UPDATE gigs
+            SET title = $1, description = $2, category = $3,
+                pay = $4, location = $5, date = $6
+            WHERE id = $7
+            """,
+            body.title, body.description, body.category,
+            body.pay, body.location, body.date, gig_id,
+        )
+    background_tasks.add_task(_embed_gig, gig_id, body)
+    return {"message": "Gig updated."}
+
+
+@router.patch("/{gig_id}/close")
+async def close_gig(
+    gig_id: str,
+    current_user: dict = Depends(require_role("business")),
+):
+    """Business closes their own gig so it no longer appears in the artist feed."""
+    pool = get_pool()
+    async with pool.acquire() as conn:
+        gig = await conn.fetchrow("SELECT business_id FROM gigs WHERE id = $1", gig_id)
+        if not gig:
+            raise HTTPException(status_code=404, detail="Gig not found.")
+        if str(gig["business_id"]) != current_user["user_id"]:
+            raise HTTPException(status_code=403, detail="Not your gig.")
+        await conn.execute("UPDATE gigs SET status = 'closed' WHERE id = $1", gig_id)
+    return {"message": "Gig closed."}
 
 
 @router.get("/{gig_id}")
