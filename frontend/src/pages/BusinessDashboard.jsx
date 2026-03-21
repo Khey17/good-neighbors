@@ -260,7 +260,7 @@ export default function BusinessDashboard() {
             <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4">Edit Gig</h2>
             <div className="flex flex-col gap-3">
               <input
-                className="input"
+                className="field"
                 placeholder="Title"
                 value={editForm.title}
                 onChange={e => setEditForm(f => ({ ...f, title: e.target.value }))}
@@ -273,26 +273,26 @@ export default function BusinessDashboard() {
                 onChange={e => setEditForm(f => ({ ...f, description: e.target.value }))}
               />
               <select
-                className="input"
+                className="field"
                 value={editForm.category}
                 onChange={e => setEditForm(f => ({ ...f, category: e.target.value }))}
               >
                 {CATEGORIES.map(c => <option key={c}>{c}</option>)}
               </select>
               <input
-                className="input"
+                className="field"
                 placeholder="Pay (e.g. $200)"
                 value={editForm.pay}
                 onChange={e => setEditForm(f => ({ ...f, pay: e.target.value }))}
               />
               <input
-                className="input"
+                className="field"
                 placeholder="Location"
                 value={editForm.location}
                 onChange={e => setEditForm(f => ({ ...f, location: e.target.value }))}
               />
               <input
-                className="input"
+                className="field"
                 placeholder="Date"
                 type="date"
                 value={editForm.date}
