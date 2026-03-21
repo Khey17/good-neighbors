@@ -82,9 +82,9 @@ export default function Login() {
   }
 
   return (
-    <div>
-      {/* Hero */}
-      <div className="bg-green-900 py-20 px-6 text-center">
+    <div className="min-h-[calc(100vh-3.5rem)] flex flex-col lg:flex-row">
+      {/* Hero - Left Side */}
+      <div className="lg:w-1/2 bg-green-900 p-10 lg:p-20 flex flex-col justify-center items-center lg:items-start text-center lg:text-left">
         <span className="inline-block bg-green-700 text-green-200 text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-6 animate-fade-up">
           Philadelphia's Creator Marketplace
         </span>
@@ -92,19 +92,19 @@ export default function Login() {
           Good<br />
           <span className="text-green-400">Neighbors.</span>
         </h1>
-        <p className="text-green-200 mt-4 text-base max-w-md mx-auto animate-fade-up">
+        <p className="text-green-200 mt-4 text-base max-w-md animate-fade-up">
           Connecting Philly creators with local businesses — matched by vibe, not keywords.
         </p>
-        <div className="flex flex-wrap justify-center gap-3 mt-8 animate-fade-up">
+        <div className="flex flex-wrap justify-center lg:justify-start gap-3 mt-8 animate-fade-up">
           {['🎵 Live Music', '🎨 Visual Art', '📸 Food Influencer', '🎬 Video & Film', '🖌️ Muralists'].map(tag => (
             <span key={tag} className="bg-green-800 text-green-200 text-xs px-3 py-1.5 rounded-full">{tag}</span>
           ))}
         </div>
       </div>
 
-      {/* Form */}
-      <div className="bg-gray-50 dark:bg-gray-950 px-4 py-14">
-        <div className="w-full max-w-sm mx-auto">
+      {/* Form - Right Side */}
+      <div className="lg:w-1/2 bg-gray-50 dark:bg-gray-950 p-6 flex justify-center items-center">
+        <div className="w-full max-w-sm">
           <div className="card p-7 animate-scale-in shadow-xl">
 
             {/* Mode toggle */}

@@ -8,7 +8,7 @@
 // Without completing this, the artist feed won't show real matches.
 // ──────────────────────────────────────────────────────────────────────────────
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../lib/auth'
 
@@ -21,6 +21,8 @@ export default function ProfileSetup() {
   const { user } = useAuth()
   const navigate = useNavigate()
 
+  const isBusiness = user?.role === 'business'
+
   const [bio, setBio]               = useState('')
   const [categories, setCategories] = useState([])
   const [skillsRaw, setSkillsRaw]   = useState('')
@@ -30,12 +32,53 @@ export default function ProfileSetup() {
   const [loading, setLoading]       = useState(false)
   const [error, setError]           = useState('')
 
+  // Load existing profile if they are coming back to edit
+  useEffect(() => {
+    if (!user) return
+    fetch('/api/profiles/me', {
+      headers: { Authorization: `Bearer ${user.access_token}` },
+    })
+      .then(res => res.ok ? res.json() : null)
+      .then(data => {
+        if (data) {
+          setBio(isBusiness ? (data.description || '') : (data.bio || ''))
+          const catStr = isBusiness ? data.industry : data.category
+          setCategories(catStr ? catStr.split(',').map(c => c.trim()).filter(Boolean) : [])
+          setSkillsRaw(data.skills ? data.skills.join(', ') : '')
+          setLocation(data.location || '')
+          setInstagram(data.instagram || '')
+          setPortfolio(data.portfolio_url || '')
+        }
+      })
+      .catch(() => {})
+  }, [user])
+
   const handleSave = async (e) => {
     e.preventDefault()
     setError('')
     setLoading(true)
 
     const skills = skillsRaw.split(',').map(s => s.trim()).filter(Boolean)
+
+    const payload = isBusiness 
+      ? {
+          business_name: user.display_name,
+          description: bio,
+          industry: categories.join(', '),
+          skills,
+          location,
+          instagram,
+          portfolio_url: portfolio,
+        }
+      : {
+          display_name:  user.display_name,
+          bio,
+          category: categories.join(', '),
+          skills,
+          location,
+          instagram,
+          portfolio_url: portfolio,
+        }
 
     try {
       const res = await fetch('/api/profiles/me', {
@@ -44,15 +87,7 @@ export default function ProfileSetup() {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${user.access_token}`,
         },
-        body: JSON.stringify({
-          display_name:  user.display_name,
-          bio,
-          category: categories.join(', '),
-          skills,
-          location,
-          instagram,
-          portfolio_url: portfolio,
-        }),
+        body: JSON.stringify(payload),
       })
 
       if (!res.ok) {
@@ -61,7 +96,7 @@ export default function ProfileSetup() {
         return
       }
 
-      navigate('/artist', { replace: true })
+      navigate(isBusiness ? '/business' : '/artist', { replace: true })
     } catch {
       setError('Could not reach the server.')
     } finally {
@@ -73,9 +108,15 @@ export default function ProfileSetup() {
     <div>
       <div className="bg-green-900 px-6 py-10">
         <div className="max-w-2xl mx-auto animate-fade-up">
-          <p className="text-green-400 text-xs font-bold uppercase tracking-widest mb-1">Welcome</p>
-          <h1 className="text-3xl font-black text-white">Build your profile, {user?.display_name?.split(' ')[0]} 👋</h1>
-          <p className="text-green-200 mt-1 text-sm">This is what businesses see — and what our AI uses to match you to gigs.</p>
+          <p className="text-green-400 text-xs font-bold uppercase tracking-widest mb-1">
+            {isBusiness ? 'Business Profile' : 'Welcome'}
+          </p>
+          <h1 className="text-3xl font-black text-white">
+            {isBusiness ? 'Update your details' : `Build your profile, ${user?.display_name?.split(' ')[0]} 👋`}
+          </h1>
+          <p className="text-green-200 mt-1 text-sm">
+            {isBusiness ? 'Tell creators about your business so they know who they are working with.' : 'This is what businesses see — and what our AI uses to match you to gigs.'}
+          </p>
         </div>
       </div>
 
@@ -85,11 +126,11 @@ export default function ProfileSetup() {
           {/* Bio */}
           <div>
             <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">
-              Bio <span className="text-green-500">*</span>
+              {isBusiness ? 'Business Description' : 'Bio'} <span className="text-green-500">*</span>
             </label>
             <textarea
               required value={bio} onChange={e => setBio(e.target.value)}
-              rows={4} placeholder="Tell businesses who you are, what you create, and what makes you you..."
+              rows={4} placeholder={isBusiness ? "Describe your space, the vibe, and what you do..." : "Tell businesses who you are, what you create, and what makes you you..."}
               className="field resize-none"
             />
             <p className="text-xs text-gray-400 mt-1">This is the most important field — the AI uses it to match your vibe to gigs.</p>
@@ -98,7 +139,7 @@ export default function ProfileSetup() {
           {/* Categories */}
           <div>
             <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">
-              Categories <span className="text-green-500">*</span>
+              {isBusiness ? 'Industry / Vibe' : 'Categories'} <span className="text-green-500">*</span>
             </label>
             <div className="flex flex-wrap gap-2">
               {CATEGORIES.map(cat => (
@@ -121,10 +162,12 @@ export default function ProfileSetup() {
 
           {/* Skills */}
           <div>
-            <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Skills</label>
+            <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">
+              {isBusiness ? 'Business Tags' : 'Skills'}
+            </label>
             <input
               type="text" value={skillsRaw} onChange={e => setSkillsRaw(e.target.value)}
-              placeholder="e.g. photography, editing, instagram, restaurants"
+              placeholder={isBusiness ? "e.g. restaurant, live music, vegan, outdoor seating" : "e.g. photography, editing, instagram, restaurants"}
               className="field"
             />
             <p className="text-xs text-gray-400 mt-1">Comma-separated. Be specific — these feed the AI matching.</p>
