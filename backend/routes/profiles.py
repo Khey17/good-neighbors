@@ -100,6 +100,19 @@ async def get_artist_profile(user_id: str):
     return dict(row)
 
 
+@router.get("/business/{user_id}")
+async def get_business_profile(user_id: str):
+    pool = get_pool()
+    async with pool.acquire() as conn:
+        row = await conn.fetchrow(
+            "SELECT business_name, description, industry, location, website FROM business_profiles WHERE user_id = $1",
+            user_id,
+        )
+    if not row:
+        raise HTTPException(status_code=404, detail="Business not found.")
+    return dict(row)
+
+
 async def _regenerate_artist_embedding(user_id: str, profile: ArtistProfileUpdate):
     try:
         embedding = await embed_artist_profile({

@@ -75,7 +75,9 @@ export default function Applicants() {
                     {(a.display_name || '?')[0]}
                   </div>
                   <div>
-                    <h3 className="font-bold text-gray-900 dark:text-gray-100">{a.display_name}</h3>
+                    <Link to={`/profile/artist/${a.user_id}`} className="font-bold text-gray-900 dark:text-gray-100 hover:text-green-600 dark:hover:text-green-400 hover:underline">
+                      {a.display_name}
+                    </Link>
                     <div className="flex flex-wrap gap-1 mt-1">
                       {(a.category || '').split(',').map(c => c.trim()).filter(Boolean).map(cat => {
                         const style = CATEGORY_STYLE[cat] || 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-300'

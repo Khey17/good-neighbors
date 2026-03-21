@@ -20,6 +20,7 @@ import ArtistFeed from './pages/ArtistFeed'
 import BusinessDashboard from './pages/BusinessDashboard'
 import PostGig from './pages/PostGig'
 import Applicants from './pages/Applicants'
+import PublicProfile from './pages/PublicProfile'
 import { AuthContext, getStoredUser, storeUser, clearStoredUser } from './lib/auth'
 
 // ─── Route guard ──────────────────────────────────────────────────────────────
@@ -75,6 +76,8 @@ export default function App() {
               <Route path="/business/gig/:gigId/applicants" element={
                 <ProtectedRoute requiredRole="business"><Applicants /></ProtectedRoute>
               } />
+
+              <Route path="/profile/:role/:id" element={<PublicProfile />} />
 
               {/* Root: redirect based on role */}
               <Route path="/" element={
