@@ -21,6 +21,19 @@ export default function Navbar({ dark, setDark }) {
 
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const dropdownRef = useRef(null)
+  
+  // Start hidden if we are on the login page so the initial animation is totally empty
+  const [showLoginNav, setShowLoginNav] = useState(location.pathname !== '/login')
+
+  useEffect(() => {
+    if (location.pathname === '/login') {
+      setShowLoginNav(false)
+      const t = setTimeout(() => setShowLoginNav(true), 3100)
+      return () => clearTimeout(t)
+    } else {
+      setShowLoginNav(true)
+    }
+  }, [location.pathname])
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -39,20 +52,32 @@ export default function Navbar({ dark, setDark }) {
   }
 
   return (
-    <nav className="sticky top-0 z-50 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 transition-colors duration-300">
-      <div className="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
+    <nav className={`sticky top-0 z-50 transition-colors duration-300 ${
+      location.pathname === '/login'
+        ? 'bg-green-900 dark:bg-gray-950 border-none'
+        : 'bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800'
+    }`}>
+      <div className={`max-w-6xl mx-auto px-6 h-14 flex items-center justify-between transition-all duration-1000 ${!showLoginNav ? 'opacity-0 pointer-events-none -translate-y-4' : 'opacity-100 translate-y-0'}`}>
 
         {/* Logo */}
-        <Link to="/" className="font-black text-green-700 dark:text-green-400 text-lg tracking-tight">
-          Good Neighbors
-        </Link>
+        {location.pathname !== '/login' ? (
+          <Link to="/" className="font-black text-green-700 dark:text-green-400 text-lg tracking-tight">
+            Good Neighbors
+          </Link>
+        ) : (
+          <div />
+        )}
 
         <div className="flex items-center gap-3">
 
           {/* Dark mode toggle */}
           <button
             onClick={() => setDark(!dark)}
-            className="w-9 h-9 flex items-center justify-center rounded-full text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+            className={`w-9 h-9 flex items-center justify-center rounded-full border transition-colors ${
+              location.pathname === '/login'
+                ? 'border-green-400 text-green-400 hover:bg-green-400/10 dark:border-white dark:text-white dark:hover:bg-white/10'
+                : 'border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800'
+            }`}
             aria-label="Toggle dark mode"
           >
             {dark ? '☀️' : '🌙'}
