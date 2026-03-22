@@ -11,7 +11,6 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../lib/auth'
-
 const CATEGORY_STYLE = {
   'Food Influencer':             'bg-orange-100 text-orange-700 dark:bg-orange-900/40 dark:text-orange-300',
   'Social Influencer':           'bg-pink-100   text-pink-700   dark:bg-pink-900/40   dark:text-pink-300',
@@ -259,45 +258,63 @@ export default function BusinessDashboard() {
           <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 w-full max-w-lg shadow-xl">
             <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4">Edit Gig</h2>
             <div className="flex flex-col gap-3">
-              <input
-                className="field"
-                placeholder="Title"
-                value={editForm.title}
-                onChange={e => setEditForm(f => ({ ...f, title: e.target.value }))}
-              />
-              <textarea
-                className="input resize-none"
-                rows={3}
-                placeholder="Description"
-                value={editForm.description}
-                onChange={e => setEditForm(f => ({ ...f, description: e.target.value }))}
-              />
-              <select
-                className="field"
-                value={editForm.category}
-                onChange={e => setEditForm(f => ({ ...f, category: e.target.value }))}
-              >
-                {CATEGORIES.map(c => <option key={c}>{c}</option>)}
-              </select>
-              <input
-                className="field"
-                placeholder="Pay (e.g. $200)"
-                value={editForm.pay}
-                onChange={e => setEditForm(f => ({ ...f, pay: e.target.value }))}
-              />
-              <input
-                className="field"
-                placeholder="Location"
-                value={editForm.location}
-                onChange={e => setEditForm(f => ({ ...f, location: e.target.value }))}
-              />
-              <input
-                className="field"
-                placeholder="Date"
-                type="date"
-                value={editForm.date}
-                onChange={e => setEditForm(f => ({ ...f, date: e.target.value }))}
-              />
+              <div className="flex flex-col gap-1">
+                <label className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Title</label>
+                <input
+                  className="field"
+                  placeholder="Title"
+                  value={editForm.title}
+                  onChange={e => setEditForm(f => ({ ...f, title: e.target.value }))}
+                />
+              </div>
+              <div className="flex flex-col gap-1">
+                <label className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Description</label>
+                <textarea
+                  className="field resize-none"
+                  rows={3}
+                  placeholder="Description"
+                  value={editForm.description}
+                  onChange={e => setEditForm(f => ({ ...f, description: e.target.value }))}
+                />
+              </div>
+              <div className="flex flex-col gap-1">
+                <label className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Category</label>
+                <select
+                  className="field"
+                  value={editForm.category}
+                  onChange={e => setEditForm(f => ({ ...f, category: e.target.value }))}
+                >
+                  {CATEGORIES.map(c => <option key={c}>{c}</option>)}
+                </select>
+              </div>
+              <div className="flex flex-col gap-1">
+                <label className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Pay</label>
+                <input
+                  className="field"
+                  placeholder="Pay (e.g. $200)"
+                  value={editForm.pay}
+                  onChange={e => setEditForm(f => ({ ...f, pay: e.target.value }))}
+                />
+              </div>
+              <div className="flex flex-col gap-1">
+                <label className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Location</label>
+                <input
+                  className="field"
+                  placeholder="Location"
+                  value={editForm.location}
+                  onChange={e => setEditForm(f => ({ ...f, location: e.target.value }))}
+                />
+              </div>
+              <div className="flex flex-col gap-1">
+                <label className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Date</label>
+                <input
+                  className="field"
+                  placeholder="Date"
+                  type="date"
+                  value={editForm.date}
+                  onChange={e => setEditForm(f => ({ ...f, date: e.target.value }))}
+                />
+              </div>
             </div>
             {saveError && (
               <p className="text-red-500 text-xs mt-3">{saveError}</p>
