@@ -81,7 +81,7 @@ good-neighbors/
 - [x] View applicants + contact handoff
 - [x] Deploy (Railway — backend + postgres + frontend)
 - [x] Dark / light mode toggle
-- [ ] Profile edit Option
+- [x] Profile edit Option
 
 ## Beyond MVP — Roadmap
 
