@@ -130,11 +130,19 @@ export default function Navbar({ dark, setDark }) {
                       </p>
                       
                       <Link 
+                        to={`/profile/${user.role}/${user.user_id}`} 
+                        onClick={() => setDropdownOpen(false)}
+                        className="flex items-center justify-center w-full py-2 bg-green-50 dark:bg-green-900/40 border border-green-200 dark:border-green-800 rounded-xl text-sm font-bold text-green-700 dark:text-green-400 hover:bg-green-100 dark:hover:bg-green-900/60 transition-all duration-200 mb-2"
+                      >
+                        View My Profile
+                      </Link>
+                      
+                      <Link 
                         to="/setup" 
                         onClick={() => setDropdownOpen(false)}
                         className="flex items-center justify-center w-full py-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-600 rounded-xl text-sm font-bold text-gray-700 dark:text-gray-300 hover:border-green-400 hover:text-green-600 dark:hover:border-green-500 dark:hover:text-green-400 transition-all duration-200"
                       >
-                        Edit Profile
+                        Edit Details
                       </Link>
                     </div>
                     
