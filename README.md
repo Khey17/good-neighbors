@@ -95,6 +95,9 @@ good-neighbors/
 - [ ] Search + filter gigs by category, location, pay
 - [ ] Admin dashboard (flag users, manage gigs)
 - [ ] Mobile-responsive polish + PWA support
+- [ ] creators should be able to switch to business profiles
+- [ ] Weightage on AI matching score based on economics(followers, money etc)
+- [ ] Research and marketing
 
 ---
 ## Checklist Flaws
