@@ -19,7 +19,7 @@ export default function PostGig() {
 
   const [title, setTitle]           = useState('')
   const [description, setDescription] = useState('')
-  const [category, setCategory]     = useState('')
+  const [categories, setCategories]   = useState([])
   const [pay, setPay]               = useState('')
   const [location, setLocation]     = useState('')
   const [date, setDate]             = useState('')
@@ -38,7 +38,7 @@ export default function PostGig() {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${user.access_token}`,
         },
-        body: JSON.stringify({ title, description, category, pay, location, date }),
+        body: JSON.stringify({ title, description, category: categories.join(', '), pay, location, date }),
       })
 
       if (!res.ok) {
@@ -91,9 +91,11 @@ export default function PostGig() {
             </label>
             <div className="flex flex-wrap gap-2">
               {CATEGORIES.map(cat => (
-                <button key={cat} type="button" onClick={() => setCategory(cat)}
+                <button key={cat} type="button" onClick={() => {
+                  setCategories(prev => prev.includes(cat) ? prev.filter(c => c !== cat) : [...prev, cat])
+                }}
                   className={`px-4 py-2 rounded-full text-sm font-bold border-2 transition-all duration-200 ${
-                    category === cat
+                    categories.includes(cat)
                       ? 'border-green-600 bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-400'
                       : 'border-gray-200 dark:border-gray-700 text-gray-500 hover:border-green-300'
                   }`}
@@ -130,7 +132,7 @@ export default function PostGig() {
               className="flex-1 py-3 rounded-xl border-2 border-gray-200 dark:border-gray-700 text-gray-500 text-sm font-bold hover:border-gray-300 transition-colors">
               Cancel
             </button>
-            <button type="submit" disabled={loading || !title || !description || !category}
+            <button type="submit" disabled={loading || !title || !description || categories.length === 0}
               className="flex-2 btn bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-xl text-sm disabled:opacity-50">
               {loading ? 'Posting...' : 'Post Gig →'}
             </button>
