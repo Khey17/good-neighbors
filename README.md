@@ -133,6 +133,50 @@ GOOGLE_API_KEY=your-gemini-key
 
 ---
 
+## Branch Strategy
+
+We use a 3-tier branch system. **Never push directly to `staging` or `main`.**
+
+```
+your-branch → staging → main
+     ↓             ↓        ↓
+  (build)      (test)    (live)
+```
+
+| Branch | Purpose | Deployed To |
+|--------|---------|-------------|
+| `main` | Production — real users | Railway (production) |
+| `staging` | Pre-production — team testing | Railway (staging) |
+| `feature/xyz`, `bugs` | Active work | Local only |
+
+### The workflow
+
+1. **Pull latest staging before starting**
+   ```bash
+   git checkout staging
+   git pull origin staging
+   ```
+
+2. **Create your branch off staging**
+   ```bash
+   git checkout -b feature/your-feature-name
+   ```
+
+3. **Build and test locally** (see GUIDE.md)
+
+4. **Open a PR → staging**
+   - Team reviews and tests on the staging URL
+   - If it works, open a second PR → main
+   - If it breaks, fix it before it ever touches main
+
+### Rules
+- PRs to `staging` and `main` require 1 approval before merging
+- Never merge your own PR
+- Never push directly to `staging` or `main`
+- If it hasn't been tested on staging, it doesn't go to `main`
+
+---
+
 ## License
 
 MIT — see [LICENSE](LICENSE)

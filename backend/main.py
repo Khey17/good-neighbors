@@ -3,6 +3,7 @@ import os
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 from db.connection import connect_db, disconnect_db, get_pool
 from routes import auth, profiles, gigs, applications, match
@@ -30,6 +31,11 @@ async def lifespan(app: FastAPI):
             print("Vector columns migrated to 3072 dimensions.")
         except Exception as e:
             print(f"Migration note: {e}")
+        try:
+            await conn.execute("ALTER TABLE artist_profiles ADD COLUMN IF NOT EXISTS portfolio_media TEXT[] DEFAULT '{}'")
+            await conn.execute("ALTER TABLE business_profiles ADD COLUMN IF NOT EXISTS portfolio_media TEXT[] DEFAULT '{}'")
+        except Exception as e:
+            print(f"Migration note for portfolio_media: {e}")
     yield
     await disconnect_db()
 
@@ -58,6 +64,10 @@ app.include_router(profiles.router, prefix="/api/profiles", tags=["Profiles"])
 app.include_router(gigs.router, prefix="/api/gigs", tags=["Gigs"])
 app.include_router(applications.router, prefix="/api/applications", tags=["Applications"])
 app.include_router(match.router, prefix="/api/match", tags=["Matching"])
+
+uploads_dir = os.path.join(os.path.dirname(__file__), "uploads")
+os.makedirs(uploads_dir, exist_ok=True)
+app.mount("/uploads", StaticFiles(directory=uploads_dir), name="uploads")
 
 
 @app.get("/")

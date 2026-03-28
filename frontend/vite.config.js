@@ -8,6 +8,7 @@ export default defineConfig({
       // In dev, any request to /api/* gets forwarded to the backend
       // So the frontend never needs to know the backend's URL
       '/api': 'http://localhost:8000',
+      '/uploads': 'http://localhost:8000',
     },
   },
 })

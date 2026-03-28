@@ -19,3 +19,10 @@ Thumbs.db
 .vscode/
 .idea/
 *.swp
+
+# Good Neighbors specific
+backend/uploads/
+test_*.py
+git_*.py
+*.txt
+*.mp4
