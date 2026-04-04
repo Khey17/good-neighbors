@@ -144,12 +144,20 @@ export default function BusinessDashboard() {
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 stagger">
               {gigs.map(gig => {
-                const catStyle = CATEGORY_STYLE[gig.category] || 'bg-gray-100 text-gray-600'
                 return (
                   <div key={gig.id} className="card p-5">
-                    <div className="flex items-start justify-between mb-3">
-                      <span className={`text-xs font-bold px-3 py-1 rounded-full ${catStyle}`}>{gig.category}</span>
-                      <span className="text-xs bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-400 font-bold px-3 py-1 rounded-full capitalize">{gig.status}</span>
+                    <div className="flex flex-wrap items-start justify-between gap-2 mb-3">
+                      <div className="flex flex-wrap gap-1">
+                        {(gig.category || '').split(',').map(c => c.trim()).filter(Boolean).map(cat => {
+                          const catStyle = CATEGORY_STYLE[cat] || 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-300'
+                          return (
+                            <span key={cat} className={`text-xs font-bold px-2.5 py-1 rounded-full ${catStyle}`}>
+                              {cat}
+                            </span>
+                          )
+                        })}
+                      </div>
+                      <span className="text-xs bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-400 font-bold px-3 py-1 rounded-full capitalize shrink-0">{gig.status}</span>
                     </div>
                     <h3 className="font-bold text-gray-900 dark:text-gray-100 text-sm leading-snug mb-3">{gig.title}</h3>
                     <div className="flex gap-4 text-xs text-gray-400 mb-4">
@@ -279,13 +287,24 @@ export default function BusinessDashboard() {
               </div>
               <div className="flex flex-col gap-1">
                 <label className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Category</label>
-                <select
-                  className="field"
-                  value={editForm.category}
-                  onChange={e => setEditForm(f => ({ ...f, category: e.target.value }))}
-                >
-                  {CATEGORIES.map(c => <option key={c}>{c}</option>)}
-                </select>
+                <div className="flex flex-wrap gap-2 mt-1">
+                  {CATEGORIES.map(c => {
+                    const selectedCats = (editForm.category || '').split(',').map(str => str.trim()).filter(Boolean)
+                    const isSelected = selectedCats.includes(c)
+                    return (
+                      <button key={c} type="button" onClick={() => {
+                        const nextCats = isSelected ? selectedCats.filter(cat => cat !== c) : [...selectedCats, c]
+                        setEditForm(f => ({ ...f, category: nextCats.join(', ') }))
+                      }}
+                        className={`px-3 py-1.5 rounded-full text-xs font-bold border transition-all ${
+                          isSelected
+                            ? 'border-green-600 bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-400'
+                            : 'border-gray-200 dark:border-gray-700 text-gray-500 hover:border-green-300'
+                        }`}
+                      >{c}</button>
+                    )
+                  })}
+                </div>
               </div>
               <div className="flex flex-col gap-1">
                 <label className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Pay</label>

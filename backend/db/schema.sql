@@ -24,6 +24,7 @@ CREATE TABLE IF NOT EXISTS artist_profiles (
     skills          TEXT[],                  -- e.g. {"photography","editing"}
     location        TEXT,
     portfolio_url   TEXT,
+    portfolio_media TEXT[] DEFAULT '{}',
     instagram       TEXT,
     gig_count       INT DEFAULT 0,           -- incremented when a gig is completed
     embedding       VECTOR(1536),            -- Gemini embedding
@@ -39,6 +40,7 @@ CREATE TABLE IF NOT EXISTS business_profiles (
     industry        TEXT,
     location        TEXT,
     website         TEXT,
+    portfolio_media TEXT[] DEFAULT '{}',
     updated_at      TIMESTAMPTZ DEFAULT NOW()
 );
 

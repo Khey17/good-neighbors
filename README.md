@@ -1,5 +1,5 @@
 # Good Neighbors
-https://amusing-joy-production-3473.up.railway.app/business
+https://amusing-joy-production-3473.up.railway.app/login
 
 > Connecting Philly creators with local businesses — matched by vibe, not keywords.
 
