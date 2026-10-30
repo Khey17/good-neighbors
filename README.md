@@ -3,7 +3,7 @@ https://amusing-joy-production-3473.up.railway.app/login
 
 > Connecting Philly creators with local businesses — matched by vibe, not keywords.
 
-Good Neighbors is a hyperlocal creator marketplace for Philadelphia. Artists, musicians, photographers, muralists, and content creators can discover gig opportunities with local businesses — and businesses can find the right creative talent — all ranked by AI-powered vibe matching, not just keyword search.
+Good Neighbors is a hyperlocal creator marketplace for Philadelphia. Artists, musicians, photographers, muralists, and content creators can discover gig opportunities with local businesses — and businesses can find the right creative talent, all ranked by AI-powered vibe matching, not just keyword search.
 
 ---
 
@@ -12,7 +12,7 @@ Good Neighbors is a hyperlocal creator marketplace for Philadelphia. Artists, mu
 - **Creators** build a profile (bio, skills, category) and browse gigs matched to their vibe
 - **Businesses** post gigs and discover creators ranked by AI similarity scores
 - **Matching** is powered by Google Gemini embeddings + pgvector cosine similarity — no keyword guessing
-- **Applying** is one click — all the info is in the profile, no forms, no friction
+- **Applying** is one click, all the info is in the profile, no forms, no friction
 
 ---
 
